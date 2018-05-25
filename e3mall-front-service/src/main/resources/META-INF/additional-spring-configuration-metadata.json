@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "LUNBO.LUNBO_-iD",
+    "type": "java.lang.String",
+    "description": "A description for 'LUNBO.LUNBO_-iD'"
+  },
+  {
+    "name": "SEARCH.ROW_-nUMBER",
+    "type": "java.lang.String",
+    "description": "A description for 'SEARCH.ROW_-nUMBER'"
+  }
+]}

@@ -1,0 +1,77 @@
+spring:
+
+  application:
+    name: e3mall-gateway-service
+  thymeleaf:
+    cache: false
+    encoding: utf-8
+    mode: HTML5
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+ 
+server:
+  port: 8080
+  
+zuul:
+#解决cookie问题
+  add-host-header: true  
+   
+  routes:
+    admin:
+      path: /admin/**
+      serviceId: e3mall-admin-service
+      sensitive-headers: '*'
+      custom-sensitive-headers: true   
+      
+    front:
+      path: /
+      serviceId: http://localhost:8087/index
+      
+    frontService:
+      path: /front/**
+      serviceId: e3mall-front-service
+      sensitive-headers: '*'
+      custom-sensitive-headers: true 
+         
+    ssoService:
+      path: /user/**
+      serviceId: e3mall-sso-service
+      sensitive-headers: '*'
+      custom-sensitive-headers: true 
+         
+    cartService:
+      path: /cart/**
+      serviceId: e3mall-cart-service
+      sensitive-headers: '*'
+      custom-sensitive-headers: true 
+        
+
+feign: 
+  hystrix: 
+    enabled: false
+
+hystrix:
+  command: 
+    default: 
+      execution: 
+        timeout: 
+          enabled: false  
+
+
+
+  
+
+ 
+
+
+
+
+
+
+

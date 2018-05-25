@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+<meta charset="UTF-8"/>
+<title>欢迎来到天猫</title>
+
+</head>
+<body>
+<nav class="top" th:fragment="tophtml">
+	<div class="top_middle">
+		<a th:href="${#httpServletRequest.getContextPath()+'/tmall'}">
+			<span style="color:#C40000;margin:0px" class=" glyphicon glyphicon-home redColor"></span>
+			天猫首页
+		</a>	
+		
+		<span>喵，欢迎来天猫</span>
+		
+		
+			<span th:if="${session.user != null}" th:text="${session.user.name}"></span>
+			<a th:if="${session.user != null}" th:href="logout" th:text="退出">退出</a>		
+		
+		<a th:if="${session.user == null}" th:href="${#httpServletRequest.getContextPath()}+'/tmall/login'" th:text="请登录">请登录</a>	
+		<a th:if="${session.user == null}" th:href="${#httpServletRequest.getContextPath()}+'/tmall/register'" th:text="免费注册">免费注册</a>	
+
+
+		<span class="pull-right">
+			<a th:href="${#httpServletRequest.getContextPath()}+'/tmall/forebought'">我的订单</a>
+			<a th:href="${#httpServletRequest.getContextPath()}+'/tmall/forecart'">
+			<span style="color:#C40000;margin:0px" class=" glyphicon glyphicon-shopping-cart redColor"></span>
+			购物车<strong id = "tt" th:text="${session.CartItemNumber}+'件'"></strong></a>		
+		</span>
+	</div>
+</nav>
+</body>
+</html>

@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: e3mall-upload-service
+
+
+fdfs: 
+  soTimeout: 1500
+  connectTimeout: 600
+  trackerList: 192.168.25.133:22122   
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+server:
+  port: 8085
+  
+PICTURE-SERVER: 
+  URL: http://192.168.25.133/
+  
+
+  
+
+ 
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="pragma" content="no-cache"/>
+<meta http-equiv="cache-control" content="no-cache"/>
+<meta http-equiv="expires" content="0"/>
+<meta name="format-detection" content="telephone=no"/>
+
+<link rel="stylesheet" type="text/css" th:href="@{~/css/head.css?v=20160713}" />
+<link rel="stylesheet" type="text/css" th:href="@{~/css/cart.css?v=20160630}"/>
+<link rel="stylesheet" type="text/css" th:href="@{~/css/common.css?v=201321222}" />
+<script type="text/javascript" th:src="@{~/js/jquery-1.4.2.min.js}"></script>
+<script type="text/javascript" th:src="@{~/js/jquery.cookie.js}"></script>
+<script type="text/javascript" th:src="@{~/js/e3mall.js}"></script>
+
+<title>商品已成功加入购物车</title>
+</head>
+<body>
+<div th:replace="include/shortcut :: shortcuthtml"></div> 
+<div th:replace="include/headerone :: headerhtml"></div>
+<div th:replace="include/mainmenu :: mainmenuhtml"></div> 
+<div class="cartMain">
+		<div class="cartThead" style="margin: 50px 50px 50px 300px;">
+			<h3 class="cartMy">您的商品已经成功加入购物车！</h3>
+			<div class="cartJsuan">
+				<input type="button" class="goshop" onclick="window.history.back();return false;" value="返回"/>
+				<input type="button" class="jiesuan youxuan" onclick="location.href='http://localhost:8080/cart/cart.html'" value="去购物车结算"/>
+			</div>
+		</div>
+
+	</div>
+	<div th:replace="include/footer :: footerhtml"></div> 
+</body>
+</html>

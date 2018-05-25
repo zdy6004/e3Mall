@@ -1,0 +1,63 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/abc?characterEncoding=UTF-8
+    username: root
+    password: 1234
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+#spring.activemq.broker-url=tcp://localhost:61616
+##spring.activemq.broker-url=failover:(tcp://localhost:61616,tcp://localhost:61617)
+#spring.activemq.close-timeout=5000
+#spring.activemq.in-memory=false
+##spring.activemq.pool.enabled=true
+#spring.activemq.pool.max-connections=100
+#spring.activemq.send-timeout=3000  
+
+#spring.rabbitmq.host=localhost
+#spring.rabbitmq.port=5672
+#spring.rabbitmq.username=spring
+#spring.rabbitmq.password=123456
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: guest
+#    password: guest
+  
+  application:
+    name: e3mall-admin-service
+
+  thymeleaf:
+    cache: false
+    encoding: utf-8
+    mode: HTML5
+
+#fdfs: 
+#  soTimeout: 1500
+#  connectTimeout: 600
+#  trackerList: 192.168.25.133:22122   
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+ 
+ 
+server:
+  port: 8081
+ 
+#PICTURE-SERVER: 
+#  URL: http://192.168.25.133/
+feign: 
+  hystrix: 
+    enabled: false
+hystrix:
+  command: 
+    default: 
+      execution: 
+        timeout: 
+          enabled: false  

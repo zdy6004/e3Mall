@@ -1,0 +1,50 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/e3mall?characterEncoding=UTF-8
+    username: root
+    password: 1234
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  application:
+    name: e3mall-front-service
+  thymeleaf:
+    cache: false
+    encoding: utf-8
+    mode: HTML5
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+ 
+server:
+  port: 8087
+
+LUNBO:
+  LUNBO_ID: 89   
+
+SEARCH:
+  ROW_NUMBER: 20 
+
+feign: 
+  hystrix: 
+    enabled: false
+
+hystrix:
+  command: 
+    default: 
+      execution: 
+        timeout: 
+          enabled: false  
+
+ 
+
+
+
+
+
+
+

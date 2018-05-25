@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+<meta http-equiv="Cache-Control" content="max-age=300" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title th:text="${query}+' - 商品搜索 - 宜立方商城'"></title>
+	<link rel="stylesheet" type="text/css" th:href="@{~/css/productList.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{~/css/base_w1200.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{~/css/common.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{~/css/jquery.alerts.css}" />
+<script type="text/javascript" th:src="@{~/js/jquery-1.4.2.min.js}"></script>
+	<script type="text/javascript" th:src="@{~/js/jquery.cookie.js}"></script>
+<script type="text/javascript" th:src="@{~/js/e3mall.js}"></script>
+<script type="text/javascript" th:src="@{~/js/global_index.js}"></script>
+<!-- <script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/  
+
+$(function(){
+	
+				var _ticket = $.cookie("user_token");
+				alert("a");
+				if(!_ticket){
+					return ;
+				}
+				$.ajax({
+					url : "http://localhost:8080/user/token/" + _ticket,
+					//dataType : "jsonp",
+					type : "GET",
+					success : function(data){
+						if(data.status == 200){
+							var username = data.data.username;
+							var html = username + "，欢迎来到宜立方购物网！<a href=\"http://www.e3mall.cn/user/logout.html\" class=\"link-logout\">[退出]</a>";
+							$("#loginbar").html(html);
+						}
+					}
+				});
+			
+		
+});
+/*]]>*/  
+</script> -->
+</head>
+<body>
+<div th:replace="include/shortcut :: shortcuthtml"></div>
+<div th:replace="include/header :: headerhtml"></div>
+<div th:replace="include/mainmenu :: mainmenuhtml"></div> 
+
+<div class="linknav">
+	<div class="schArticle">
+		<a th:href="@{~/article/search?keyword=%E6%9C%88%E9%A5%BC}" target="_blank"><span th:text="'找到和“'+${query}+'”相关的文章'+${totalPages }+'篇'"></span><span
+			id="articlenum"></span>&gt;&gt;
+		</a>
+	</div>
+	<div class="breadcrumb">
+		<span th:text="'全部结果 : '+${query}"></span>
+	</div>
+</div>
+<div class="content_list">
+  <div class="main-box">
+    
+   <a id="prolist-id"></a>
+    <div class="r-filter">
+      <div class="f-sort">
+        <div class="pagin">
+          <span class="txt"><span class="n" th:text="${page }+'/'+${totalPages }"></span></span>
+          <span class="prev" th:text="上一页"></span><span class="next" th:text="下一页"></span>       	</div>
+        <div class="total"><span th:text="'共'+${recourdCount }+'个商品'"></span></div>
+      </div>
+    </div>
+        
+    <a name="prolist" id="prolist"></a>
+    <div class="p-list">
+      <ul class="list-all">
+        
+         <li th:each="item : ${itemList }">
+            <div class="l-wrap">
+				<div class="pic">
+					<a class="trackref" th:href="${#httpServletRequest.getContextPath()}+'/front/item/'+${item.id}" title="" target="_blank">
+						<img th:src="${item.images[0] }" />
+					</a>
+				</div>
+	            <div class="price">                   
+					<span><span class="p-now"><strong th:text="'￥'+${#numbers.formatDecimal(item.price / 100 , 0, 'COMMA', 2, 'POINT')}"></strong></span><span class="p-nor"></span><span class="active" style="">直降</span></span>			
+				</div>
+	            <div class="title-a">
+	                <a class="trackref presaleSign_225865" th:href="${#httpServletRequest.getContextPath()}+'/item/'+${item.id}" target="_blank" th:utext="${item.title }"></a>
+	            </div>
+	        	<div class="title-b" style=""><a class="trackref" th:href="${#httpServletRequest.getContextPath()}+'/item/'+${item.id}" target="_blank" th:text="${sell_point }"></a></div>
+	            <div class="comment">
+	                <div class="owner_shop_list" th:text="自营"></div>                    
+	            </div>
+		    </div>
+		 </li>
+        
+    </ul>
+      <span class="clear"></span>
+    </div>
+    
+    <div class="pages">
+	      </div>
+    
+  </div>
+    <div class="left-box">
+    <div class="catlist" id="cateall">
+      <div class="ct"><h2 th:text="在结果中筛选"></h2></div>
+      <div class="cm">
+      <div class="catitem" style="border-top-width: 0px;"><h3><b></b><a href="/productlist/search/?categoryId=8&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc" class="">生鲜食品<span>（1）</span></a></h3><ul><li><a href="/productlist/search/?categoryId=57&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc">蛋品（1）</a></li><li><a href="/productlist/search/?categoryId=292&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc">&nbsp;&nbsp;&nbsp;&nbsp;松花蛋/咸鸭蛋（1）</a></li></ul></div><div class="catitem"><h3><b></b><a href="/productlist/search/?categoryId=6&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc" class="">休闲食品<span>（35）</span></a></h3><ul><li><a href="/productlist/search/?categoryId=44&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc">糖果/巧克力（2）</a></li><li><a href="/productlist/search/?categoryId=238&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc">&nbsp;&nbsp;&nbsp;&nbsp;巧克力（2）</a></li><li><a href="/productlist/search/?categoryId=7321&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc">月饼（33）</a></li><li><a href="/productlist/search/?categoryId=7325&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc">&nbsp;&nbsp;&nbsp;&nbsp;冰皮月饼（1）</a></li><li><a href="/productlist/search/?categoryId=7331&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc">&nbsp;&nbsp;&nbsp;&nbsp;其他月饼（21）</a></li><li><a href="/productlist/search/?categoryId=7381&amp;keyword=%E6%9C%88%E9%A5%BC&amp;o=saleNum%3Adesc">&nbsp;&nbsp;&nbsp;&nbsp;月饼券（11）</a></li></ul></div>       </div>
+    </div> 
+      
+    
+  </div>
+  
+<div th:replace="include/footer :: footerhtml"></div> 
+<script type="text/javascript" th:src="@{~/js/common.js?v=20160713}"></script>
+<script type="text/javascript" th:src="@{~/js/cart.js?v=20160713}"></script>
+<script type="text/javascript" th:src="@{~/js/jquery.alerts.js}"></script>
+<script type="text/javascript" th:src="@{~/js/NewVersion.js?v=20160713}"></script>
+<script type="text/javascript" th:src="@{~/js/cookie.js?v=20160416222}"></script>
+<script type="text/javascript" th:src="@{~/js/shadow.js?v=20160416}"></script>
+</div>
+</body>
+</html>
