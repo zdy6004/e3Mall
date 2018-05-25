@@ -13,7 +13,7 @@ public class PageController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showIndex(){
-		
+		int i = 9;
 		return "adminIndex";
 	}
 	
