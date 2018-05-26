@@ -2,6 +2,8 @@ package com.e3mall.cart.common.jedis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -17,6 +19,16 @@ public class RedisClient {
 
     @Autowired
     private RedisTemplate redisTemplate;
+    
+    @Autowired(required = false)
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
+        RedisSerializer stringSerializer = new StringRedisSerializer();
+        redisTemplate.setKeySerializer(stringSerializer);
+        redisTemplate.setValueSerializer(stringSerializer);
+        redisTemplate.setHashKeySerializer(stringSerializer);
+        redisTemplate.setHashValueSerializer(stringSerializer);
+        this.redisTemplate = redisTemplate;
+    }
     /**
      * 写入缓存
      * @param key
@@ -99,6 +111,12 @@ public class RedisClient {
         result = operations.get(key);
         return result;
     }
+    
+    public boolean hmExists(String key, Object hashKey){
+    	HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
+    	return hash.hasKey(key, hashKey);
+    }
+    
     /**
      * 哈希 添加
      * @param key
@@ -109,6 +127,7 @@ public class RedisClient {
         HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
         hash.put(key,hashKey,value);
     }
+    
 
     /**
      * 哈希获取数据

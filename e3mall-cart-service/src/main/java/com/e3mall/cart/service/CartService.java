@@ -17,13 +17,17 @@ import com.e3mall.cart.domain.TbItem;
 
 public interface CartService {
 
-	List<TbItem> addCart(long itemId, int num, HttpServletRequest request);
+	List<TbItem> addCartToCookie(long itemId, int num, HttpServletRequest request);
 
-	List<TbItem> findCartList(HttpServletRequest request);
+//	List<TbItem> findCartList(HttpServletRequest request);
 
 	E3Result updateNum(long itemId, int num);
 
-	E3Result deleteCartItem(long itemId, HttpServletRequest request);
+	E3Result addCartToRedis(long itemId, int num, long userId);
+
+	E3Result updateNumToRedis(long userId, long itemId, int num);
+
+//	E3Result deleteCartItem(long itemId, HttpServletRequest request);
 
 	
 	

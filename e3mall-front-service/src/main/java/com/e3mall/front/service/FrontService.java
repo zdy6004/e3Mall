@@ -3,6 +3,8 @@ package com.e3mall.front.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.e3mall.front.common.pojo.Item;
 import com.e3mall.front.common.pojo.SearchResult;
 import com.e3mall.front.common.utils.E3Result;
@@ -18,9 +20,11 @@ public interface FrontService {
 
 	Map<String, Object> findItemByPid(long itemId);
 
-	List<TbItem> findCartList();
+	List<TbItem> findCartList(HttpServletRequest request);
 
 	E3Result deleteCartItem(long itemId);
+
+	E3Result deleteCartItemToRedis(long userId, long itemId);
 
 //	void addCart(long itemId, int num);
 

@@ -58,7 +58,7 @@ public class ItemController {
 		itemService.reshelfItemBatch(ids);
 		
 	}
-	@RequestMapping(value = {"/front/item/{itemId}", "/front/cart/add/{itemId}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/front/item/{itemId}", "/cart/add/{itemId}"}, method = RequestMethod.GET)
 	public Map<String, Object> showItem(@PathVariable("itemId") long itemId){
 		Map<String, Object> map = itemService.findItemByItemId(itemId);
 		return map;

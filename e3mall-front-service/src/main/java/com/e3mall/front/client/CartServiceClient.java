@@ -15,8 +15,8 @@ import com.sun.jersey.core.header.MediaTypes;
 
 @FeignClient(value = "e3mall-cart-service")
 public interface CartServiceClient {
-	@RequestMapping(value = "/front/cart/cart", method = RequestMethod.GET,consumes = MediaTypes.WADL_JSON_STRING)
-	List<TbItem> findCartList();
+	@RequestMapping(value = "/front/cart/cart", method = RequestMethod.POST,consumes = MediaTypes.WADL_JSON_STRING)
+	void mergeCartList();
 	@RequestMapping(value = "/front/cart/delete/{itemId}", method = RequestMethod.GET,consumes = MediaTypes.WADL_JSON_STRING)
 	E3Result deleteCartItem(@PathVariable("itemId") long itemId);
 	

@@ -72,7 +72,7 @@ public class SsoServiceImpl implements SsoService {
 			if (password.equals(user.getPassword())) {
 				String token = UUID.randomUUID().toString();
 				user.setPassword(null);
-				redisClient.set("SESSION"+token, user, EXPIRE_TIME);
+				redisClient.set("SESSION"+token, JsonUtils.objectToJson(user), EXPIRE_TIME);
 				return result.ok(token);
 			}
 		}
@@ -82,7 +82,8 @@ public class SsoServiceImpl implements SsoService {
 	@Override
 	public E3Result findUserByToken(String token) {
 		E3Result result = new E3Result();
-		TbUser user = (TbUser) redisClient.get("SESSION"+token);
+		String userJson = (String) redisClient.get("SESSION"+token);
+		TbUser user = JsonUtils.jsonToPojo(userJson, TbUser.class);
 		if(user == null){
 			return result.build(500, "session过期");
 		}

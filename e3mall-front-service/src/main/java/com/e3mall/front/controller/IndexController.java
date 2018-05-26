@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.e3mall.front.client.CartServiceClient;
+import com.e3mall.front.common.jedis.RedisClient;
 import com.e3mall.front.common.pojo.Item;
 import com.e3mall.front.common.pojo.SearchResult;
 import com.e3mall.front.common.utils.E3Result;
@@ -24,6 +27,7 @@ import com.e3mall.front.common.utils.JsonUtils;
 import com.e3mall.front.domain.TbContent;
 import com.e3mall.front.domain.TbItem;
 import com.e3mall.front.domain.TbItemDesc;
+import com.e3mall.front.domain.TbUser;
 import com.e3mall.front.service.FrontService;
 import com.e3mall.front.utils.CookieUtil;
 import com.e3mall.front.utils.CookieUtils;
@@ -37,6 +41,10 @@ public class IndexController {
 	private int ROW_NUMBER;
 	@Autowired
 	private FrontService frontService;
+	@Autowired
+	private CartServiceClient cartServiceClient;
+	@Autowired
+	private RedisClient redisClient;
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	
 	public String showIndex(Model model){
@@ -60,10 +68,6 @@ public class IndexController {
 	@RequestMapping(value = "/item/{itemId}", method = RequestMethod.GET)
 	public String showItem(@PathVariable("itemId") long itemId, Model model){
 		Map<String, Object> map = frontService.findItemByPid(itemId);
-//		String ha = (String) map.get("ha");
-//		System.out.println(ha);
-//		List<TbContent> findAll = (List<TbContent>) map.get("findAll");
-//		System.out.println(findAll);
 		String itemDescToJson = (String) map.get("itemDesc");
 		String tbItemToJson = (String) map.get("tbItem");
 		TbItem tbItem = JsonUtils.jsonToPojo(tbItemToJson, TbItem.class);
@@ -81,7 +85,8 @@ public class IndexController {
 	}
 	
 	@RequestMapping("/page/register")
-	public String showRegisterPage(){
+	public String showRegisterPage(HttpServletRequest request){
+		TbUser user1 = (TbUser) request.getAttribute("user");
 		return "register";
 	}
 	
@@ -93,8 +98,7 @@ public class IndexController {
 	@RequestMapping(value = "/cart/cart", method = RequestMethod.GET)
 	public String showCart(Model model,HttpServletRequest request){
 
-		List<TbItem> cartList =  frontService.findCartList();
-		
+		List<TbItem> cartList =  frontService.findCartList(request);
 	
 		long totalPrice = 0;
 		for (TbItem tbItem : cartList) {
@@ -109,8 +113,14 @@ public class IndexController {
 		return "cart";
 	}
 	@RequestMapping(value = "/cart/delete/{itemId}", method = RequestMethod.GET)
-	public String deleteCartItem(@PathVariable("itemId") long itemId, Model model) {
-		E3Result result = frontService.deleteCartItem(itemId);
+	public String deleteCartItem(@PathVariable("itemId") long itemId, Model model, HttpServletRequest request) {
+		TbUser findUser = findUser(request);
+		E3Result result = new E3Result();
+		if(findUser != null){
+			result = frontService.deleteCartItemToRedis(findUser.getId(), itemId);
+		}else{
+			result = frontService.deleteCartItem(itemId);
+		}
 		
 		List<TbItem> cartList = (List<TbItem>) result.getData();
 		long totalPrice = 0;
@@ -126,4 +136,22 @@ public class IndexController {
 		CookieUtils.addCookie("cart", objectToJson);
 		return "redirect:/front/cart/cart";
 	}
+	
+	public TbUser findUser(HttpServletRequest request) {
+		String user_token = CookieUtils.getCookie("user_token", String.class);
+
+		if (StringUtils.isNotBlank(user_token)) {
+			String userJson = (String) redisClient.get("SESSION" + user_token);
+			// 用户登录过期
+			if (StringUtils.isBlank(userJson)) {
+				return null;
+			} else {
+				// 用户登录没有过期，获得用户信息
+				TbUser user = JsonUtils.jsonToPojo(userJson, TbUser.class);
+				return user;
+			}
+		}
+		return null;
+	}
+
 }

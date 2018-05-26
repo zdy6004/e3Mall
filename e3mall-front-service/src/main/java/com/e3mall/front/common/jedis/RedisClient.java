@@ -1,4 +1,4 @@
-package com.e3mall.content.common.jedis;
+package com.e3mall.front.common.jedis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
@@ -138,6 +138,11 @@ public class RedisClient {
     public Object hmGet(String key, Object hashKey){
         HashOperations<String, Object, Object>  hash = redisTemplate.opsForHash();
         return hash.get(key,hashKey);
+    }
+    
+    public List<Object> hmGetHvals(String key){
+    	HashOperations<String, Object, Object>  hash = redisTemplate.opsForHash();
+    	return hash.values(key);
     }
     
     /**

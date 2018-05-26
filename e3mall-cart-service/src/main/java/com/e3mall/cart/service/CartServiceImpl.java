@@ -31,6 +31,7 @@ import com.e3mall.cart.common.utils.JsonUtils;
 import com.e3mall.cart.domain.TbContent;
 import com.e3mall.cart.domain.TbItem;
 import com.e3mall.cart.domain.TbItemDesc;
+import com.e3mall.cart.domain.TbUser;
 import com.e3mall.cart.repository.ItemDescReposiroty;
 import com.e3mall.cart.repository.ItemReposiroty;
 import com.e3mall.cart.repository.contentRepository;
@@ -40,15 +41,18 @@ public class CartServiceImpl implements CartService {
 
 	@Autowired
 	private ItemServiceClient itemServiceClient;
+	@Autowired
+	private RedisClient redisClient;
 
 	@Override
-	public List<TbItem> addCart(long itemId, int num, HttpServletRequest request) {
-		List<TbItem> itemListFromCookie = getItemListFromCookie();
-		System.out.println("添加前"+itemListFromCookie.size());
-		for (TbItem tbItem : itemListFromCookie) {
+	public List<TbItem> addCartToCookie(long itemId, int num, HttpServletRequest request) {
+		// cookie中获取购物车列表
+		List<TbItem> cartList = getItemListFromCookie();
+		
+		for (TbItem tbItem : cartList) {
 			if (itemId == tbItem.getId().longValue()) {
 				tbItem.setNum(num + tbItem.getNum());
-				return itemListFromCookie;
+				return cartList;
 			}
 		}
 
@@ -59,40 +63,27 @@ public class CartServiceImpl implements CartService {
 		String images = tbItem.getImage();
 		String[] split = images.split(",");
 		tbItem.setImage(split[0]);
-		itemListFromCookie.add(tbItem);
-		for (TbItem it : itemListFromCookie) {
-			System.out.println(it);
-		}
+		cartList.add(tbItem);
+		
 
-		return itemListFromCookie;
+		return cartList;
 
 	}
 
 	public List<TbItem> getItemListFromCookie() {
 		String cartListJson = CookieUtils.getCookie("cart", String.class);
-		
+
 		if (StringUtils.isBlank(cartListJson)) {
 			return new ArrayList<>();
-			
+
 		}
 		List<TbItem> itemList = JsonUtils.jsonToList(cartListJson, TbItem.class);
-		
 
-			return itemList;
-		
+		return itemList;
 
-		
-		
 	}
-	
 
-	@Override
-	public List<TbItem> findCartList(HttpServletRequest request) {
-		String header = request.getHeader("Cookie");
-		System.out.println(header);
-		List<TbItem> itemListFromCookie = JsonUtils.jsonToList(header, TbItem.class);
-		return itemListFromCookie;
-	}
+
 
 	@Override
 	public E3Result updateNum(long itemId, int num) {
@@ -108,20 +99,41 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public E3Result deleteCartItem(long itemId, HttpServletRequest request) {
-		E3Result result = new E3Result();
-		List<TbItem> itemListFromCookie = getItemListFromCookie();
-		System.out.println("删除之前"+itemListFromCookie.size());
-		for (TbItem tbItem : itemListFromCookie) {
-			if (itemId == tbItem.getId().longValue()) {
-				
-				itemListFromCookie.remove(tbItem);
-				
-				break;
+	public E3Result addCartToRedis(long itemId, int num, long userId) {
+		boolean exists = redisClient.hmExists("Cart"+userId, itemId+"");
+		
+		if(exists){
+			String cartListJson = (String) redisClient.hmGet("Cart"+userId, itemId+"");
+			TbItem item = JsonUtils.jsonToPojo(cartListJson, TbItem.class);
+			item.setNum(item.getNum() + num);
+			redisClient.hmSet("Cart"+userId, itemId+"", JsonUtils.objectToJson(item));
+			return E3Result.ok();
+		}else{
+			Map<String, Object> findItemByPid = itemServiceClient.findItemByPid(itemId);
+			String itemJson = (String) findItemByPid.get("tbItem");
+			TbItem tbItem = JsonUtils.jsonToPojo(itemJson, TbItem.class);
+			tbItem.setNum(num);
+			String images= tbItem.getImage();
+			if(StringUtils.isNotBlank(images)){
+				String[] image = images.split(",");
+				tbItem.setImage(image[0]);
 			}
+			
+			redisClient.hmSet("Cart"+userId, itemId+"", JsonUtils.objectToJson(tbItem));
+			return E3Result.ok();
 		}
-		System.out.println("删除之后"+itemListFromCookie.size());
-		return result.ok(itemListFromCookie);
+		
 	}
+
+	@Override
+	public E3Result updateNumToRedis(long userId, long itemId, int num) {
+		String cartListJson = (String) redisClient.hmGet("Cart"+userId, itemId+"");
+		TbItem item = JsonUtils.jsonToPojo(cartListJson, TbItem.class);
+		item.setNum(num);
+		redisClient.hmSet("Cart"+userId, itemId+"", JsonUtils.objectToJson(item));
+		return E3Result.ok();
+	}
+
+	
 
 }

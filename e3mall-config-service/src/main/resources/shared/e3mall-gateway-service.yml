@@ -6,7 +6,11 @@ spring:
     cache: false
     encoding: utf-8
     mode: HTML5
-
+  redis:
+    database: 0
+    host: 192.168.25.128
+    port: 6379
+    password: 
 eureka:
   client:
     serviceUrl:

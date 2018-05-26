@@ -13,7 +13,8 @@ import com.sun.jersey.core.header.MediaTypes;
 public interface ItemServiceClient {
 
 	
-	@RequestMapping(value = "/front/cart/add/{itemId}", method = RequestMethod.GET,consumes = MediaTypes.WADL_JSON_STRING)
+	//@RequestMapping(value = {"/front/cart/add/{itemId}", "/cart/add/{itemId}"}, method = RequestMethod.GET,consumes = MediaTypes.WADL_JSON_STRING)
+	@RequestMapping(value = "/cart/add/{itemId}", method = RequestMethod.GET,consumes = MediaTypes.WADL_JSON_STRING)
 	Map<String, Object> findItemByPid(@PathVariable("itemId") long itemId);
 
 }

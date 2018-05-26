@@ -11,6 +11,11 @@ spring:
     show-sql: true
   application:
     name: e3mall-front-service
+  redis:
+    database: 0
+    host: 192.168.25.128
+    port: 6379
+    password:     
   thymeleaf:
     cache: false
     encoding: utf-8
