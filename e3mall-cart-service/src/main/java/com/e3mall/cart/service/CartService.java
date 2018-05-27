@@ -27,6 +27,8 @@ public interface CartService {
 
 	E3Result updateNumToRedis(long userId, long itemId, int num);
 
+	E3Result clearCartList(long userId);
+
 //	E3Result deleteCartItem(long itemId, HttpServletRequest request);
 
 	

@@ -29,6 +29,7 @@ import com.e3mall.cart.common.utils.JsonUtils;
 import com.e3mall.cart.domain.TbItem;
 import com.e3mall.cart.domain.TbUser;
 import com.e3mall.cart.service.CartService;
+import com.sun.jersey.core.header.MediaTypes;
 
 @RestController
 public class CartController {
@@ -91,4 +92,9 @@ public class CartController {
 			}
 			return null;
 		}
+	@RequestMapping(value = "/front/order/create", method = RequestMethod.POST)
+	public E3Result clearCartList(@RequestParam("userId") long userId){
+		E3Result clearCartList = cartService.clearCartList(userId);
+		return clearCartList;
+	}
 }

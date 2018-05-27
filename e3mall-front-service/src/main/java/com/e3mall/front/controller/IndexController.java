@@ -31,6 +31,7 @@ import com.e3mall.front.domain.TbUser;
 import com.e3mall.front.service.FrontService;
 import com.e3mall.front.utils.CookieUtil;
 import com.e3mall.front.utils.CookieUtils;
+import com.e3mall.front.common.pojo.OrderInfo;
 
 @Controller
 public class IndexController {
@@ -140,6 +141,7 @@ public class IndexController {
 	public TbUser findUser(HttpServletRequest request) {
 		String user_token = CookieUtils.getCookie("user_token", String.class);
 
+		System.out.println(user_token+"=================");
 		if (StringUtils.isNotBlank(user_token)) {
 			String userJson = (String) redisClient.get("SESSION" + user_token);
 			// 用户登录过期
@@ -153,5 +155,43 @@ public class IndexController {
 		}
 		return null;
 	}
+	
+	@RequestMapping("/order/order-cart")
+	public String showOrderCart(HttpServletRequest request,Model model){
+		TbUser findUser = findUser(request);
+		if(findUser != null){
+			List<TbItem> findCartList = frontService.findCartList(request);
+			long totalPrice = 0;
+			for (TbItem tbItem : findCartList) {
+				long price = tbItem.getNum() * tbItem.getPrice();
+				String image = tbItem.getImage();
+				String[] images = image.split(",");
+				tbItem.setImage(images[0]);
+				totalPrice += price;
+			}
+			model.addAttribute("totalPrice", totalPrice);
+			model.addAttribute("cartList", findCartList);
+			return "order-cart";
+		}else{
+			return "redirect:/page/login";
+		}
+		
+	}
+	@RequestMapping(value = "/order/create", method = RequestMethod.POST)
+	public String orderCreate(HttpServletRequest request, OrderInfo orderInfo, Model model){
+		TbUser findUser = findUser(request);
+		orderInfo.setUserId(findUser.getId());
+		orderInfo.setBuyerNick(findUser.getUsername());
+		E3Result result = frontService.orderCreate(orderInfo);
+		if(result.getStatus() == 200){
+			frontService.clearCartList(findUser.getId());
+		}
+		model.addAttribute("cartList", result.getData());
+		model.addAttribute("payment", orderInfo.getPayment());
+		model.addAttribute("orderId", orderInfo.getOrderId());
+		
+		return "success";
+	}
+
 
 }

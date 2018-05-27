@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 import com.e3mall.front.client.CartServiceClient;
 import com.e3mall.front.client.ContentServiceClient;
 import com.e3mall.front.client.ItemServiceClient;
+import com.e3mall.front.client.OrderServiceClient;
 import com.e3mall.front.client.SearchServiceClient;
 import com.e3mall.front.common.jedis.RedisClient;
+import com.e3mall.front.common.pojo.OrderInfo;
 import com.e3mall.front.common.pojo.SearchResult;
 import com.e3mall.front.common.utils.E3Result;
 import com.e3mall.front.common.utils.JsonUtils;
@@ -35,6 +37,8 @@ public class FrontServiceImpl implements FrontService {
 	private ItemServiceClient itemServiceClient;
 	@Autowired
 	private CartServiceClient cartServiceClient;
+	@Autowired
+	private OrderServiceClient orderServiceClient;
 	@Autowired
 	private RedisClient redisClient;
 
@@ -159,6 +163,18 @@ public class FrontServiceImpl implements FrontService {
 		redisClient.hmRemove("Cart"+userId, itemId+"");
 		List<TbItem> cartListFromRedis = getCartListFromRedis(userId);
 		return E3Result.ok(cartListFromRedis);
+	}
+
+	@Override
+	public E3Result orderCreate(OrderInfo orderInfo) {
+		E3Result result = orderServiceClient.orderCreate(orderInfo);
+		return result;
+	}
+
+	@Override
+	public E3Result clearCartList(Long id) {
+		E3Result clearCartList = cartServiceClient.clearCartList(id);
+		return clearCartList;
 	}
 
 }

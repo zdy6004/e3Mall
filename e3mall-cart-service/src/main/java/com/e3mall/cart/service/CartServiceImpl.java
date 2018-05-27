@@ -134,6 +134,13 @@ public class CartServiceImpl implements CartService {
 		return E3Result.ok();
 	}
 
+	@Override
+	public E3Result clearCartList(long userId) {
+		redisClient.remove("Cart"+userId);
+		return E3Result.ok();
+		
+	}
+
 	
 
 }

@@ -19,6 +19,8 @@ public interface CartServiceClient {
 	void mergeCartList();
 	@RequestMapping(value = "/front/cart/delete/{itemId}", method = RequestMethod.GET,consumes = MediaTypes.WADL_JSON_STRING)
 	E3Result deleteCartItem(@PathVariable("itemId") long itemId);
+	@RequestMapping(value = "/front/order/create", method = RequestMethod.POST,consumes = MediaTypes.WADL_JSON_STRING)
+	E3Result clearCartList(@RequestParam("userId") long userId);
 	
 
 }

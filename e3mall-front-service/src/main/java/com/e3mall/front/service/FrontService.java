@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.e3mall.front.common.pojo.Item;
+import com.e3mall.front.common.pojo.OrderInfo;
 import com.e3mall.front.common.pojo.SearchResult;
 import com.e3mall.front.common.utils.E3Result;
 import com.e3mall.front.domain.TbContent;
@@ -25,6 +26,10 @@ public interface FrontService {
 	E3Result deleteCartItem(long itemId);
 
 	E3Result deleteCartItemToRedis(long userId, long itemId);
+
+	E3Result orderCreate(OrderInfo orderInfo);
+
+	E3Result clearCartList(Long id);
 
 //	void addCart(long itemId, int num);
 
