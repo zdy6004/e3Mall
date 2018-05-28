@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: e3mall-monitoring-service
+    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+server:
+  port: 8889
+  
+turbine:
+  aggregator:
+    cluster-config: default
+  app-config: e3mall-admin-service,e3mall-gateway-service,e3mall-item-service,e3mall-front-service,e3mall-content-service
+  cluster-name-expression: "'default'"     

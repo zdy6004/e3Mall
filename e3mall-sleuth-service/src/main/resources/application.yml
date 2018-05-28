@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: e3mall-sleuth-service
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+server:
+  port: 8890  
+
+
+     
