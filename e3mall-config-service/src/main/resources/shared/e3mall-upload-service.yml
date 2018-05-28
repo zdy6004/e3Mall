@@ -1,7 +1,11 @@
 spring:
   application:
     name: e3mall-upload-service
-
+  zipkin:
+    base-url: http://localhost:8890
+  sleuth:
+    sampler:
+      percentage: 1.0
 
 fdfs: 
   soTimeout: 1500

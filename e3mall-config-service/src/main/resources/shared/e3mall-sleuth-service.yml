@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: e3mall-sleuth-service
+
+server:
+  port: 8890
+ 

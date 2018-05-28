@@ -9,7 +9,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    
+  zipkin:
+    base-url: http://localhost:8890
+  sleuth:
+    sampler:
+      percentage: 1.0    
   application:
     name: e3mall-order-service
   redis:

@@ -9,6 +9,8 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +33,7 @@ import com.e3mall.item.repository.contentRepository;
 
 @Service
 public class ItemServiceImpl implements ItemService {
-
+	private Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 	@Autowired
 	private ItemReposiroty itemReposiroty;
 	@Autowired
@@ -65,6 +67,7 @@ public class ItemServiceImpl implements ItemService {
 		itemDesc.setItemId(item.getId());
 		itemDesc.setUpdated(new Date());
 		itemDescReposiroty.save(itemDesc);
+		logger.info("创建订单{}成功",item.getId());
 	}
 	
 	@Override
@@ -124,7 +127,7 @@ public class ItemServiceImpl implements ItemService {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("没有找到数据{}", e);
 		}
 		
 		tbItem = itemReposiroty.findOne(itemId);
@@ -140,7 +143,7 @@ public class ItemServiceImpl implements ItemService {
 			redisClient.set("itemDesc_"+itemId, itemDesc, 60l);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("redis数据添加异常{}", e);
 		}
 		return map;
 	}

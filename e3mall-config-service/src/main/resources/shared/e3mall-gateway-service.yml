@@ -11,6 +11,11 @@ spring:
     host: 192.168.25.128
     port: 6379
     password: 
+  zipkin:
+    base-url: http://localhost:8890
+  sleuth:
+    sampler:
+      percentage: 1.0
 eureka:
   client:
     serviceUrl:

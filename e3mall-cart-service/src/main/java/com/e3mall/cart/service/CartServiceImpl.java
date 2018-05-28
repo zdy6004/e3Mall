@@ -1,44 +1,25 @@
 package com.e3mall.cart.service;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
-
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.e3mall.cart.client.ItemServiceClient;
 import com.e3mall.cart.common.jedis.RedisClient;
-import com.e3mall.cart.common.pojo.DataGridResult;
-import com.e3mall.cart.common.utils.CookieUtil;
 import com.e3mall.cart.common.utils.CookieUtils;
 import com.e3mall.cart.common.utils.E3Result;
-import com.e3mall.cart.common.utils.IDUtils;
 import com.e3mall.cart.common.utils.JsonUtils;
-import com.e3mall.cart.domain.TbContent;
 import com.e3mall.cart.domain.TbItem;
-import com.e3mall.cart.domain.TbItemDesc;
-import com.e3mall.cart.domain.TbUser;
-import com.e3mall.cart.repository.ItemDescReposiroty;
-import com.e3mall.cart.repository.ItemReposiroty;
-import com.e3mall.cart.repository.contentRepository;
 
 @Service
 public class CartServiceImpl implements CartService {
-
+	private Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
+	
 	@Autowired
 	private ItemServiceClient itemServiceClient;
 	@Autowired

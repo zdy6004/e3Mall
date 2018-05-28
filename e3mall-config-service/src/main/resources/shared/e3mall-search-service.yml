@@ -19,7 +19,11 @@ spring:
     port: 5672
     username: guest
     password: guest
-
+  zipkin:
+    base-url: http://localhost:8890
+  sleuth:
+    sampler:
+      percentage: 1.0
 #
 #fdfs: 
 #  soTimeout: 1500

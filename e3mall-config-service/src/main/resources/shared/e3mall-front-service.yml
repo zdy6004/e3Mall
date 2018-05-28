@@ -20,6 +20,11 @@ spring:
     cache: false
     encoding: utf-8
     mode: HTML5
+  zipkin:
+    base-url: http://localhost:8890
+  sleuth:
+    sampler:
+      percentage: 1.0
 eureka:
   client:
     serviceUrl:

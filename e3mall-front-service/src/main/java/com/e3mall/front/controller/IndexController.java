@@ -141,7 +141,6 @@ public class IndexController {
 	public TbUser findUser(HttpServletRequest request) {
 		String user_token = CookieUtils.getCookie("user_token", String.class);
 
-		System.out.println(user_token+"=================");
 		if (StringUtils.isNotBlank(user_token)) {
 			String userJson = (String) redisClient.get("SESSION" + user_token);
 			// 用户登录过期
